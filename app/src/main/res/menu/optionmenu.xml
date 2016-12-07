@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/ajoutContact"
+        android:title="Ajouter un Contact"/>
+    <item
+        android:id="@+id/ajoutNumero"
+        android:title="Ajouter un Numéro"/>
+    <item
+        android:id="@+id/supprimeTout"
+        android:title="Supprimer tous les Contacts"/>
+    <item
+        android:id="@+id/creerVerrou"
+        android:title="Créer un Verrou"/>
+    <item
+        android:id="@+id/StartOrStop"
+        android:title="Start"/>
+    <item
+        android:id="@+id/lock"
+        android:title="Lock"/>
+</menu>
