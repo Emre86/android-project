@@ -26,14 +26,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         // AJOUT A CETTE LIGNE
         smsMaps = new SmsMaps(MapsActivity.this);
-        //number = savedInstanceState.getString("number");
+
         Bundle extras = getIntent().getExtras();
         if(extras == null) {
             number= null;
         } else {
             number= extras.getString("number");
         }
-        //Toast.makeText(getApplicationContext(),"NUMERO "+number,Toast.LENGTH_LONG).show();
+
         // Recepteur local pour les intents
 
         this.registerReceiver(smsMaps,new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
@@ -57,15 +57,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        double latitude = 0.0;
-        double longitude = 0.0 ;
-        if(Locale.getDefault().getLanguage().equals("fr")){
-            latitude = 48.858053;
-            longitude =2.294289;
-        }
-        else {
+        double latitude = 48.858053;
+        double longitude = 2.294289 ;
+
+        if(Locale.getDefault().getLanguage().equals("tr")){
             latitude = 39.925018;
             longitude = 32.836956;
+        }
+        if (Locale.getDefault().getLanguage().equals("en")){
+            latitude = 37.8078124;
+            longitude = -122.47516439999998;
         }
         mMap = googleMap;
 
@@ -76,7 +77,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // Add a marker in Sydney and move the camera
         LatLng monument = new LatLng(latitude, longitude);
-        //mMap.addMarker(new MarkerOptions().position(monument).title("Tour Eiffel"));
+        mMap.addMarker(new MarkerOptions().position(monument).title("Monument"));
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(toureiffel));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(monument,15));
     }

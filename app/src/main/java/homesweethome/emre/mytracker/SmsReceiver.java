@@ -9,11 +9,11 @@ import android.provider.Telephony;
 import android.support.v4.content.LocalBroadcastManager;
 import android.telephony.SmsMessage;
 import android.util.Log;
-import android.widget.Toast;
+
 
 public class SmsReceiver extends BroadcastReceiver {
 
-    public static final String TAG = "SMSReceiver";
+    private static final String TAG =  "SMSReceiver";
 
     public SmsReceiver() {
     }
@@ -22,9 +22,6 @@ public class SmsReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         // TODO: This method is called when the BroadcastReceiver is receiving
         // an Intent broadcast.
-        Log.i(TAG,"Intent Received: "+intent.getAction());
-
-        Log.i(TAG,"VALEUR DE TELEPHON: " + Telephony.Sms.Intents.SMS_RECEIVED_ACTION);
 
         if (intent.getAction() == Telephony.Sms.Intents.SMS_RECEIVED_ACTION){
         // if (intent.getAction() == android.provider.Telephony.SMS_RECEIVED)
@@ -33,6 +30,7 @@ public class SmsReceiver extends BroadcastReceiver {
 
             if (bundle != null){
                 Object[] pdus = (Object[]) bundle.get("pdus");
+
                 final SmsMessage[] messages = new SmsMessage[pdus.length];
                 for (int i = 0; i < pdus.length; i++) {
                         //messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i], info);
@@ -41,11 +39,19 @@ public class SmsReceiver extends BroadcastReceiver {
 
 
                 if (messages.length > -1){
-                    Log.i(TAG,"Message received: "+messages[0].getMessageBody());
-                    //Toast.makeText(context,messages[0].getMessageBody(),Toast.LENGTH_SHORT).show();
-                    String message = messages[0].getMessageBody();
-                    String phoneNumber = messages[0].getDisplayOriginatingAddress();
-                    checkSMS(message,phoneNumber,context);
+                    String messageOrigin = "";
+                    String phoneNumber = "";
+                    for (SmsMessage smsMessage :messages) {
+                        messageOrigin = messageOrigin + smsMessage.getMessageBody();
+                        Log.i(TAG, "Message received: " + smsMessage.getMessageBody());
+                        phoneNumber = smsMessage.getDisplayOriginatingAddress();
+                    }
+                    checkSMS(messageOrigin, phoneNumber, context);
+
+                    //Log.i(TAG, "Message received: " + messages[0].getMessageBody());
+                    //String message = messages[0].getMessageBody();
+                    //String phoneNumber = messages[0].getDisplayOriginatingAddress();
+                    //checkSMS(message, phoneNumber, context);
                 }
             }
         }
@@ -70,13 +76,21 @@ public class SmsReceiver extends BroadcastReceiver {
 
 
     public void checkSMS(String SMS,String phoneNumber,Context context){
-        /*if(SMS.equals("stopService")){
-            broadcastMessage(context,SMS,phoneNumber);
-        }*/
+
+
         if (SMS.equals("startGPS")){
             broadcastMessage(context,SMS,phoneNumber);
         }
         if (SMS.equals("stopGPS")){
+            broadcastMessage(context,SMS,phoneNumber);
+        }
+        if (SMS.startsWith("REQUEST:")){
+            broadcastMessage(context,SMS,phoneNumber);
+        }
+        if (SMS.startsWith("RESPONSE:")){
+            broadcastMessage(context,SMS,phoneNumber);
+        }
+        if (SMS.startsWith("GEO:")){
             broadcastMessage(context,SMS,phoneNumber);
         }
     }
@@ -89,6 +103,5 @@ public class SmsReceiver extends BroadcastReceiver {
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 
     }
-
 
 }

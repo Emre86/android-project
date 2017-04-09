@@ -58,7 +58,7 @@ package="homesweethome.emre.mytracker" android:versionName="2" android:versionCo
              You can define the keys for the debug and release targets in src/debug/ and src/release/. 
         -->
         <activity android:name=".MapsActivity" />
-        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyDdKE-BO9-1RnSS1Pw8LV4EIC0yfnlylrE" />
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyB5AkIvFCKUr76cyjddhzDuWP0DQt4Bu7Y" />
 
     </application>
 

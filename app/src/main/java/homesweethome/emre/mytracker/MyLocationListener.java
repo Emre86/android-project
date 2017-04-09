@@ -16,22 +16,31 @@ import java.util.List;
  */
 public class MyLocationListener implements LocationListener {
 
-    private static final String TAG = "MyLocationListener";
+    private final static String APP = "MYTRACKER:" ;
+    private static final String TAG = APP + "MyLocListener";
     ServiceLock main;
 
     String phoneNumber;
 
-    MyLocationListener(ServiceLock main,String myPhoneNumber){
+    Sym symKey ;
+
+    MyLocationListener(ServiceLock main,String myPhoneNumber,Sym symKey ){
         this.main = main ;
         phoneNumber = myPhoneNumber ;
+        this.symKey = symKey;
     }
 
     public void onLocationChanged(Location location){
-        Log.i(TAG,"LATITUDE LOC: "+location.getLatitude());
-        Log.i(TAG,"LONGITUDE LOC: "+location.getLongitude());
+        Log.i(TAG,"LAT:"+location.getLatitude());
+        Log.i(TAG,"LON:"+location.getLongitude());
 
         Sms mySms = new Sms();
-        mySms.sendSms(phoneNumber,"Lat:"+location.getLatitude()+ " "+ "Long:"+location.getLongitude(),main.getApplicationContext());
+        String localisation = "Lat:"+location.getLatitude()+ " "+ "Long:"+location.getLongitude();
+        if(symKey == null){
+            Log.e(TAG,"SymKey is Null");
+        }
+        String geoposition = "GEOPOSITION:" + symKey.encrypt(localisation);
+        mySms.sendSms(phoneNumber,geoposition,main.getApplicationContext());
     }
 
 

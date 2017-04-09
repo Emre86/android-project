@@ -14,6 +14,7 @@ public final class FeedReaderContract {
     public static abstract class FeedEntry implements BaseColumns {
         public static final String TABLE_NAME = "TABLE_CONTACT";
         public static final String COLUMN_NAME_NAME = "Name_Name";
-        public static final String COLUMN_NAME_TEL = "Name_tel";
+        public static final String COLUMN_NAME_TEL = "Name_Tel";
+        public static final String COLUMN_NAME_KEY = "Name_Key";
     }
 }

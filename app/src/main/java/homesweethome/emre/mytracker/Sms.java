@@ -9,11 +9,18 @@ import android.content.IntentFilter;
 import android.util.Log;
 import android.widget.Toast;
 import android.telephony.SmsManager;
+
+import java.util.ArrayList;
+
 /**
  * Created by emre on 23/08/16.
  */
 public class Sms {
-    final static String TAG = "Sms";
+
+
+    private final static String TAG =  "Sms";
+    private final static int PERMISSIONS_REQUEST_SEND_SMS = 101;
+
     public void sendSms(String phoneNumber,String message, final Context myContext){
 
 
@@ -29,7 +36,7 @@ public class Sms {
                 Context cont = myContext.getApplicationContext();
                 switch (getResultCode()){
                     case Activity.RESULT_OK:
-                        //Toast.makeText(cont,"SMS Sent",Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(cont,"SMS Sent",Toast.LENGTH_SHORT).show();
                         break;
                     case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
                         Toast.makeText(cont,"Generic failure", Toast.LENGTH_SHORT).show();
@@ -63,9 +70,22 @@ public class Sms {
         }, new IntentFilter(DELIVERED));
 
         SmsManager sms = SmsManager.getDefault();
-        //Log.i(TAG,"PHONE NUMBER: "+phoneNumber);
-        //Log.i(TAG,"MESSAGE: "+message);
 
-        sms.sendTextMessage(phoneNumber,null,message,sentPI,deliveredPI);
+
+        ArrayList<String> messages = sms.divideMessage(message);
+
+        ArrayList<PendingIntent> sentPIs  = new ArrayList<>();
+        ArrayList<PendingIntent> deliveredPIs = new ArrayList<>();
+
+        //sms.sendTextMessage(phoneNumber,null,message,sentPI,deliveredPI);
+        for (int i = 0; i < messages.size();i++ ){
+            sentPIs.add(sentPI);
+            deliveredPIs.add(deliveredPI);
+        }
+
+        sms.sendMultipartTextMessage(phoneNumber,null,messages,sentPIs,deliveredPIs);
+
+        Log.d(TAG,"seres");
     }
+
 }

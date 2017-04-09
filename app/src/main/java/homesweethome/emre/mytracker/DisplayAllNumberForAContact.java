@@ -29,7 +29,7 @@ public class DisplayAllNumberForAContact extends AppCompatActivity implements Co
 
 
     private String name = null;
-    private final static String TAG="DisplayNumberForContact";
+    private final static String TAG=  "DisplayNumberForContact";
 
 
     @Override
@@ -74,10 +74,15 @@ public class DisplayAllNumberForAContact extends AppCompatActivity implements Co
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                     String tel = adapterView.getItemAtPosition(i).toString();
-                    tel = tel.replace(" ","");
-                    tel = tel.replace("+","00");
-                    tel = tel.replace("(","");
-                    tel = tel.replace(")","");
+                    String lettre = ""+(char) 160;
+
+                    String tel1 = tel.replace(" ","");
+                    String tel2 = tel1.replace("+","00");
+                    String tel3 = tel2.replace("(","");
+                    String tel4 = tel3.replace(")","");
+                    String tel5 = tel4.replace(lettre,"");
+
+
 
                     FeedReaderDBHelper mDbHelper = new FeedReaderDBHelper(getApplicationContext());
 
@@ -87,7 +92,8 @@ public class DisplayAllNumberForAContact extends AppCompatActivity implements Co
                     String []isInDB = {
                             FeedEntry._ID,
                             FeedEntry.COLUMN_NAME_NAME,
-                            FeedEntry.COLUMN_NAME_TEL};
+                            FeedEntry.COLUMN_NAME_TEL,
+                            FeedEntry.COLUMN_NAME_KEY};
 
                     String clauseWhere = FeedEntry.COLUMN_NAME_NAME + " = ?";
                     String[] whereArgs = {name};
@@ -103,20 +109,21 @@ public class DisplayAllNumberForAContact extends AppCompatActivity implements Co
 
                         ContentValues values = new ContentValues();
                         values.put(FeedEntry.COLUMN_NAME_NAME,name);
-                        values.put(FeedEntry.COLUMN_NAME_TEL,tel);
+                        values.put(FeedEntry.COLUMN_NAME_TEL,tel5);
+                        //values.put(FeedEntry.COLUMN_NAME_KEY,"");
                         db.update(
                                 FeedEntry.TABLE_NAME,
                                 values,
                                 clauseWhere,
                                 whereArgs);
-                        Log.i(TAG,"Update Name: "+name);
+
                     }
                     else {
 
                         // Create a new map of values, where column names are the keys
                         ContentValues values = new ContentValues();
                         values.put(FeedEntry.COLUMN_NAME_NAME, name);
-                        values.put(FeedEntry.COLUMN_NAME_TEL, tel);
+                        values.put(FeedEntry.COLUMN_NAME_TEL, tel5);
 
                         // Insert the new row, returning the primary key value of the new row
                         long newRowId;
@@ -126,9 +133,9 @@ public class DisplayAllNumberForAContact extends AppCompatActivity implements Co
                                 values);
 
                         if (newRowId == -1) {
-                            Log.e(TAG, "Echec Insertion Name: "+name);
+                            Log.e(TAG,"Echec Insertion: " + name);
                         }else {
-                            Log.i(TAG, "Insertion Name:" + name + " ID: "+newRowId);
+                            Log.i(TAG, "Insertion Name: " + name);
                         }
 
                         Toast.makeText(getApplicationContext(), "Ecriture des données dans la base ", Toast.LENGTH_SHORT).show();
